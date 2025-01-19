@@ -16,7 +16,7 @@ import "./App.css";
 const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
-  const [controlled, setControlled] = useState(false);
+  const [controlled, setControlled] = useState(true);
   const modeTitle = useMemo(
     () => (controlled ? "Controlled" : "Uncontrolled"),
     [controlled]
