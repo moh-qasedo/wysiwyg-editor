@@ -1,35 +1,85 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { memo, useCallback, useEffect, useState } from "react";
+import {
+  convertFromRaw,
+  convertToRaw,
+  DraftEditorCommand,
+  EditorState,
+  RichUtils,
+} from "draft-js";
+import Container from "./components/Container";
+import Editor from "./components/Editor";
+import Button from "./components/Button";
+import { editContent, getContent } from "./apis";
+import CONSTANTS from "./constants";
+import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App: React.FC = () => {
+  const [loading, setLoading] = useState(false);
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+
+  const handleToolbarAction = useCallback(
+    (command: DraftEditorCommand) => {
+      const newState = RichUtils.handleKeyCommand(editorState, command);
+      if (newState) setEditorState(newState);
+    },
+    [editorState]
+  );
+
+  const renderEditorToolbar = useCallback(() => {
+    return (
+      <Container className={CONSTANTS.DEFAULT_CLASSNAMES.TOOLBAR}>
+        <Button
+          imgSrc={CONSTANTS.IMAGES.BOLD}
+          onPress={() => handleToolbarAction("bold")}
+        />
+        <Button
+          imgSrc={CONSTANTS.IMAGES.ITALIC}
+          onPress={() => handleToolbarAction("italic")}
+        />
+        <Button
+          imgSrc={CONSTANTS.IMAGES.UNDERLINE}
+          onPress={() => handleToolbarAction("underline")}
+        />
+        <Button
+          imgSrc={CONSTANTS.IMAGES.CODE}
+          onPress={() => handleToolbarAction("code")}
+        />
+      </Container>
+    );
+  }, [handleToolbarAction]);
+
+  const getData = useCallback(async () => {
+    const rawContent = (await getContent()) as string;
+    if (rawContent) {
+      const contentState = convertFromRaw(JSON.parse(rawContent));
+      setEditorState(EditorState.createWithContent(contentState));
+    }
+  }, []);
+
+  const saveContent = useCallback(async () => {
+    const rawContent = JSON.stringify(
+      convertToRaw(editorState.getCurrentContent())
+    );
+    setLoading(true);
+    await editContent(rawContent);
+    setLoading(false);
+  }, [editorState]);
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test qasedo
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <Container className="app-container">
+      <Editor
+        value={editorState}
+        onChange={setEditorState}
+        renderToolbar={renderEditorToolbar}
+        onSave={saveContent}
+        saving={loading}
+      />
+    </Container>
+  );
+};
 
-export default App
+export default memo(App);
