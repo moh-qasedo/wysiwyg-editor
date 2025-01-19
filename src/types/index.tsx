@@ -4,6 +4,7 @@ import { PropsWithChildren } from "react";
 export type Orientation = "vertical" | "horizontal";
 
 export type ContainerProps = PropsWithChildren<{
+  id?: string;
   className?: string;
   style?: React.CSSProperties;
   onPress?: () => void;
@@ -15,14 +16,12 @@ export type ImageProps = {
   src: string;
 };
 
-export type ButtonProps = {
+export type ButtonProps = ContainerProps & {
   title?: string;
   onPress: () => void;
   selected?: boolean;
   imgSrc?: string;
-  className?: string;
   selectedClassName?: string;
-  style?: React.CSSProperties;
 };
 
 export type DividerProps = {

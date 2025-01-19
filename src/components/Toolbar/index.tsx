@@ -25,15 +25,25 @@ const Toolbar: React.FC<ToolbarProps> = ({
   );
   return (
     <Container
+      id="toolbar-container"
       className={getFullClassNames(
         className,
         CONSTANTS.DEFAULT_CLASSNAMES.TOOLBAR
       )}
       {...otherProps}
     >
-      <Button imgSrc={CONSTANTS.IMAGES.BOLD} onPress={handlePressBold} />
-      <Button imgSrc={CONSTANTS.IMAGES.ITALIC} onPress={handlePressItalic} />
       <Button
+        id="bold-btn"
+        imgSrc={CONSTANTS.IMAGES.BOLD}
+        onPress={handlePressBold}
+      />
+      <Button
+        id="italic-btn"
+        imgSrc={CONSTANTS.IMAGES.ITALIC}
+        onPress={handlePressItalic}
+      />
+      <Button
+        id="underline-btn"
         imgSrc={CONSTANTS.IMAGES.UNDERLINE}
         onPress={handlePressUnderline}
       />

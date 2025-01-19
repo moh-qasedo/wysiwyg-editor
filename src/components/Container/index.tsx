@@ -5,6 +5,7 @@ import CONSTANTS from "../../constants";
 import "./styles.css";
 
 const Container: React.FC<ContainerProps> = ({
+  id,
   style,
   className,
   children,
@@ -12,6 +13,8 @@ const Container: React.FC<ContainerProps> = ({
 }) => {
   return (
     <div
+      id={id}
+      data-testid={id}
       onClick={onPress}
       className={getFullClassNames(
         className,

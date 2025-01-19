@@ -10,11 +10,10 @@ import "./styles.css";
 const Button: React.FC<ButtonProps> = ({
   title,
   selected = false,
-  onPress,
   imgSrc,
-  style,
   className,
   selectedClassName,
+  ...otherProps
 }) => {
   const buttonClassName = useMemo(
     () =>
@@ -27,7 +26,7 @@ const Button: React.FC<ButtonProps> = ({
     [selected, className, selectedClassName]
   );
   return (
-    <Container className={buttonClassName} style={style} onPress={onPress}>
+    <Container className={buttonClassName} {...otherProps}>
       {imgSrc && <Image src={imgSrc} />}
       {title && <Text>{title}</Text>}
     </Container>
