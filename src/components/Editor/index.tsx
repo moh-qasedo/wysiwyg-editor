@@ -61,7 +61,12 @@ const Editor: React.FC<EditerProps> = ({
         placeholder="Start writing..."
       />
       <Container className="footer">
-        <Button onPress={onSave} imgSrc={CONSTANTS.IMAGES.SAVE} />
+        {
+          <Button
+            onPress={() => onSave(editorState)}
+            imgSrc={CONSTANTS.IMAGES.SAVE}
+          />
+        }
         {saving && <Text>Saving...</Text>}
       </Container>
     </Container>

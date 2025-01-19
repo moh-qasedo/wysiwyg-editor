@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 import {
   convertFromRaw,
   convertToRaw,
@@ -16,6 +16,22 @@ import "./App.css";
 const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [controlled, setControlled] = useState(false);
+  const modeTitle = useMemo(
+    () => (controlled ? "Controlled" : "Uncontrolled"),
+    [controlled]
+  );
+  const state = useMemo(
+    () => ({
+      value: controlled ? editorState : null,
+      onChange: controlled ? setEditorState : null,
+    }),
+    [controlled, editorState, setEditorState]
+  );
+
+  const handleToggleMode = useCallback(() => {
+    setControlled(!controlled);
+  }, [controlled]);
 
   const handleToolbarAction = useCallback(
     (command: DraftEditorCommand) => {
@@ -56,14 +72,12 @@ const App: React.FC = () => {
     }
   }, []);
 
-  const saveContent = useCallback(async () => {
-    const rawContent = JSON.stringify(
-      convertToRaw(editorState.getCurrentContent())
-    );
+  const saveContent = useCallback(async (state: EditorState) => {
+    const rawContent = JSON.stringify(convertToRaw(state.getCurrentContent()));
     setLoading(true);
     await editContent(rawContent);
     setLoading(false);
-  }, [editorState]);
+  }, []);
 
   useEffect(() => {
     getData();
@@ -71,9 +85,16 @@ const App: React.FC = () => {
 
   return (
     <Container className="app-container">
+      <Container>
+        <Button
+          style={{ width: "auto", alignSelf: "center" }}
+          onPress={handleToggleMode}
+          title={modeTitle}
+        />
+      </Container>
       <Editor
-        value={editorState}
-        onChange={setEditorState}
+        value={state.value}
+        onChange={state.onChange}
         renderToolbar={renderEditorToolbar}
         onSave={saveContent}
         saving={loading}
