@@ -39,6 +39,6 @@ export type EditerProps = ContainerProps & {
   value?: EditorState;
   onChange?: (state: EditorState) => void;
   renderToolbar?: () => React.ReactNode;
-  onSave?: (EditorState) => void;
+  onSave?: (state: EditorState) => void;
   saving?: boolean;
 };

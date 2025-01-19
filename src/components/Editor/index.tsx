@@ -63,7 +63,7 @@ const Editor: React.FC<EditerProps> = ({
       <Container className="footer">
         {
           <Button
-            onPress={() => onSave(editorState)}
+            onPress={() => onSave?.(editorState)}
             imgSrc={CONSTANTS.IMAGES.SAVE}
           />
         }

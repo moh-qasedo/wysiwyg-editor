@@ -23,8 +23,8 @@ const App: React.FC = () => {
   );
   const state = useMemo(
     () => ({
-      value: controlled ? editorState : null,
-      onChange: controlled ? setEditorState : null,
+      value: controlled ? editorState : undefined,
+      onChange: controlled ? setEditorState : undefined,
     }),
     [controlled, editorState, setEditorState]
   );
