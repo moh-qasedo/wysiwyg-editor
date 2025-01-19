@@ -1,0 +1,21 @@
+.container.button {
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f8ff;
+  border-radius: 5px;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #cae9f5;
+}
+
+.button.selected,
+.button:active {
+  background-color: #afdceb;
+}
